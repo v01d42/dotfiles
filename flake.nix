@@ -16,12 +16,16 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    claude-code-overlay = {
+      url = "github:ryoppippi/claude-code-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # neovim-nighty
     # neovim-nighty-overlay.url = "github:nix-community/neovim-nighty-overlay"
     # vim-overlay.url = "github:kawarimidoll/vim-overlay"
 
     # AI coding agents
-    # claude-code-overlay.url = "github:ryoppippi/claude-code-overlay"
     # llm-agent.url = "github:numtide/llm-agent.nix"
   };
 
@@ -38,7 +42,7 @@
       systems = ["x86_64-linux" "aarch64-darwin"];
       forAllSystems = nixpkgs.lib.genAttrs systems;
     in {
-      
+
       formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
 
       # Custom packages
