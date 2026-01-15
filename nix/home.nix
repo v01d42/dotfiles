@@ -83,7 +83,7 @@ in {
       # AI coding agent
       ++ [
         pkgs.claude-code
-      ]
+      ];
   };
 
   xdg.configFile = {

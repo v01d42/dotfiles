@@ -35,7 +35,7 @@
     home-manager,
     # neovim-nighty-overlay
     # vim-overlay
-    claude-code-overlay
+    claude-code-overlay,
     # llm-agent
     ...
     }: let
