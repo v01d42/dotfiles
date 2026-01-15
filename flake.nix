@@ -35,7 +35,7 @@
     home-manager,
     # neovim-nighty-overlay
     # vim-overlay
-    # claude-code-overlay
+    claude-code-overlay
     # llm-agent
     ...
     }: let
@@ -57,14 +57,14 @@
         pkgs = import nixpkgs{
           inherit system;
           config.allowUnfree = true;
-          # overlays = [
+          overlays = [
           #  neovim-nighty-overlay.overlays.default
           #  (vim-overlay.overlays.feature {
           #    lua = true;
           #    python3 = true;
           #  })
-          #    claude-code-overlay.overlays.default
-          #];
+            claude-code-overlay.overlays.default
+          ];
         };
         username = builtins.getEnv "USER";
       in

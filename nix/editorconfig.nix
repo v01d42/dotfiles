@@ -10,7 +10,7 @@ _: {
         insert_final_newline = true;
         trim_trailing_whitespace = true;
       };
-      "{*.{css,json,lua,mmd,sh,tf,tftpl,tfvars,toml,ts,vim,yaml,zshenv,zshrc},vimrc}" = {
+      "{*.{css,json,lua,mmd,nix,sh,tf,tftpl,tfvars,toml,ts,vim,yaml,zshenv,zshrc},vimrc}" = {
         indent_size = 2;
       };
       "{*.go,Makefile}" = {

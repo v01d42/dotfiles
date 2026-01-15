@@ -7,7 +7,7 @@
   ...
 }: let
   # Platform-agnostic paths
-  homeDir = 
+  homeDir =
     if pkgs.stdenv.isDarwin
     then "Users/${username}"
     else "/home/${username}";
@@ -41,40 +41,49 @@ in {
     ];
 
     # User packages
-    packages = [
-      # Version Manager
-      pkgs.gh
-      pkgs.ghq
+    packages =
+      lib.optionals pkgs.stdenv.isLinux [
+        pkgs.zsh
+        pkgs.wslu
+      ]
+      ++ [
+        # Version Manager
+        pkgs.gh
+        pkgs.ghq
 
-      # Search
-      pkgs.fd
-    
-      # File viewers
-      pkgs.jq
+        # Search
+        pkgs.fd
 
-      # System
-      pkgs.wget
+        # File viewers
+        pkgs.jq
 
-      # Language Runtimes
-      pkgs.deno
-      pkgs.go
-      pkgs.nodejs
-      pkgs.python3
-      pkgs.uv
+        # System
+        pkgs.wget
 
-      # Linters & Formatters
-      pkgs.alejandra
+        # Language Runtimes
+        pkgs.deno
+        pkgs.go
+        pkgs.nodejs
+        pkgs.python3
+        pkgs.uv
 
-      # LSP
-    
-      # Editor
-      pkgs.neovim
-      pkgs.vim
+        # Linters & Formatters
+        pkgs.alejandra
 
-      # Build tools
-      pkgs.cmake
-      pkgs.gcc
-    ];
+        # LSP
+
+        # Editor
+        pkgs.neovim
+        pkgs.vim
+
+        # Build tools
+        pkgs.cmake
+        pkgs.gcc
+      ]
+      # AI coding agent
+      ++ [
+        pkgs.claude-code
+      ]
   };
 
   xdg.configFile = {
