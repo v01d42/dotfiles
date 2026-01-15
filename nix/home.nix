@@ -73,6 +73,7 @@ in {
 
       # Build tools
       pkgs.cmake
+      pkgs.gcc
     ];
   };
 
