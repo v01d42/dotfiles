@@ -50,6 +50,7 @@ in {
         # Version Manager
         pkgs.gh
         pkgs.ghq
+        pkgs.lazygit
 
         # Search
         pkgs.fd
@@ -79,6 +80,13 @@ in {
         # Build tools
         pkgs.cmake
         pkgs.gcc
+
+        # containers
+        pkgs.docker
+
+        # k8s packages
+        pkgs.kubectl
+        pkgs.kind
       ]
       # AI coding agent
       ++ [
