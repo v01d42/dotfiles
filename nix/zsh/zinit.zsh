@@ -9,11 +9,15 @@ source "${ZINIT_HOME}/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
-# Theme (visual appearance handled by p10k, this is fallback)
-ZSH_THEME="agnoster"
-
-# Plugins
-plugins=(git)
+# Zinit Plugins
+# theme
+zinit ice pick"async.zsh" src"pure.zsh"
+zinit light sindresorhus/pure
+# syntax-highlighting
+zinit light zsh-users/zsh-syntax-highlighting
+# auto-completions
+zinit light zsh-users/zsh-autosuggestions
+zinit light zsh-users/zsh-completions
 
 # direnv hook (if not already loaded by home-manager)
 if [[ -z "$DIRENV_DIR" ]] && command -v direnv &> /dev/null; then
