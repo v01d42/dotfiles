@@ -29,6 +29,9 @@ if command -v mise &> /dev/null; then
   eval "$(mise activate zsh)"
 fi
 
+# Initialize completion system
+autoload -Uz compinit && compinit
+
 # kubectl completion (if available)
 if command -v kubectl &> /dev/null; then
   source <(kubectl completion zsh)
