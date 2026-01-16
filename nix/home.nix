@@ -59,6 +59,7 @@ in {
         pkgs.jq
 
         # System
+        pkgs.unzip
         pkgs.wget
 
         # Language Runtimes

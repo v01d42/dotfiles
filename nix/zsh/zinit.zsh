@@ -24,11 +24,6 @@ if [[ -z "$DIRENV_DIR" ]] && command -v direnv &> /dev/null; then
   eval "$(direnv hook zsh)"
 fi
 
-# mise (if available)
-if command -v mise &> /dev/null; then
-  eval "$(mise activate zsh)"
-fi
-
 # Initialize completion system
 autoload -Uz compinit && compinit
 
