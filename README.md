@@ -43,6 +43,7 @@ My personal dotfiles managed with Nix and home-manager.
 
 4. Set zsh as default shell:
    ```sh
+   echo $(which zsh) | sudo tee -a /etc/shells
    chsh -s $(which zsh)
    ```
 
