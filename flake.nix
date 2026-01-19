@@ -21,22 +21,16 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # neovim-nighty
-    # neovim-nighty-overlay.url = "github:nix-community/neovim-nighty-overlay"
-    # vim-overlay.url = "github:kawarimidoll/vim-overlay"
-
     # AI coding agents
-    # llm-agent.url = "github:numtide/llm-agent.nix"
+    llm-agent.url = "github:numtide/llm-agent.nix"
   };
 
   outputs = {
     self,
     nixpkgs,
     home-manager,
-    # neovim-nighty-overlay
-    # vim-overlay
     claude-code-overlay,
-    # llm-agent
+    llm-agent,
     ...
     }: let
       systems = ["x86_64-linux" "aarch64-darwin"];
@@ -58,11 +52,6 @@
           inherit system;
           config.allowUnfree = true;
           overlays = [
-          #  neovim-nighty-overlay.overlays.default
-          #  (vim-overlay.overlays.feature {
-          #    lua = true;
-          #    python3 = true;
-          #  })
             claude-code-overlay.overlays.default
           ];
         };
@@ -72,7 +61,7 @@
         inherit pkgs;
         extraSpecialArgs = {
           inherit username;
-          # llmAgentPkgs = llm-agent.packages.${system};
+          llmAgentPkgs = llm-agent.packages.${system};
         };
         modules = [
           ./nix/home.nix

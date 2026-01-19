@@ -92,7 +92,16 @@ in {
       # AI coding agent
       ++ [
         pkgs.claude-code
+        llmAgentsPkgs.ccusage
+        llmAgentsPkgs.codex
+        llmAgentsPkgs.copilot-cli
+        llmAgentsPkgs.gemini-cli
       ];
+    file = {
+      ".claude/skills".source = symlink "${dotfilesDir}/config/claude/skills";
+      # ".codex".source = symlink "${dotfilesDir}/config/codex";
+      ".zshenv".source = symlink "${dotfilesDir}/config/zsh/.zshenv";
+    };
   };
 
   xdg.configFile = {
@@ -107,6 +116,7 @@ in {
     "vim".source = symlink "${dotfilesDir}/config/vim";
     # "wezterm".source = symlink "${dotfilesDir}/config/wezterm";
     # "zeno".source = symlink "${dotfilesDir}/config/zeno";
+    "zsh".source = symlink "${dotfilesDir}/config/zsh";
   };
 
   programs = {
