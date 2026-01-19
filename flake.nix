@@ -22,7 +22,7 @@
     };
 
     # AI coding agents
-    llm-agent.url = "github:numtide/llm-agent.nix"
+    llm-agents.url = "github:numtide/llm-agents.nix";
   };
 
   outputs = {
@@ -30,7 +30,7 @@
     nixpkgs,
     home-manager,
     claude-code-overlay,
-    llm-agent,
+    llm-agents,
     ...
     }: let
       systems = ["x86_64-linux" "aarch64-darwin"];
@@ -61,7 +61,7 @@
         inherit pkgs;
         extraSpecialArgs = {
           inherit username;
-          llmAgentPkgs = llm-agent.packages.${system};
+          llmAgentsPkgs = llm-agents.packages.${system};
         };
         modules = [
           ./nix/home.nix

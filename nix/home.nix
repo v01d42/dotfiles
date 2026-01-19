@@ -3,7 +3,7 @@
   pkgs,
   lib,
   username,
-  # llmAgentPkgs,
+  llmAgentsPkgs,
   ...
 }: let
   # Platform-agnostic paths
@@ -93,9 +93,9 @@ in {
       ++ [
         pkgs.claude-code
         llmAgentsPkgs.ccusage
-        llmAgentsPkgs.codex
-        llmAgentsPkgs.copilot-cli
-        llmAgentsPkgs.gemini-cli
+        # llmAgentsPkgs.codex  # TODO: build failure in upstream
+        # llmAgentsPkgs.copilot-cli
+        # llmAgentsPkgs.gemini-cli  # TODO: hash mismatch in upstream
       ];
     file = {
       ".claude/skills".source = symlink "${dotfilesDir}/config/claude/skills";
@@ -202,10 +202,10 @@ in {
         setopt hist_save_no_dups
 
         # Source modular configs
-        source ${dotfilesDir}/nix/zsh/keybind.zsh
-        source ${dotfilesDir}/nix/zsh/zinit.zsh
-        source ${dotfilesDir}/nix/zsh/prompt.zsh
-        # source ${dotfilesDir}/nix/zsh/aws.zsh
+        source ${dotfilesDir}/config/zsh/keybind.zsh
+        source ${dotfilesDir}/config/zsh/zinit.zsh
+        source ${dotfilesDir}/config/zsh/prompt.zsh
+        # source ${dotfilesDir}/config/zsh/aws.zsh
 
         # Local config
         if [[ -f ~/.zshrc.local ]]; then
