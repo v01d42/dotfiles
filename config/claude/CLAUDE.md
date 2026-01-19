@@ -50,23 +50,11 @@ Skills are stored in the `skills/` directory for specific integrations.
 
 | Skill                   | Description                        |
 | ----------------------- | ---------------------------------- |
-| bigquery                | BigQuery development guide         |
-| claude-config-optimizer | Claude Code config and changelog   |
-| codex-cli-optimizer     | Codex CLI config and changelog     |
-| confluence-to-md        | Confluence page to Markdown        |
-| daily-report            | Daily work report generation       |
-| databricks              | Databricks development guide       |
-| dbt                     | dbt development guide              |
 | draw-io                 | draw.io diagram creation/editing   |
 | git                     | Git operations guide               |
 | github                  | GitHub and PR operations guide     |
-| jupyter-notebook        | Jupyter Notebook execution guide   |
+| go                      | Golang environment and execution   |
 | nix                     | Nix commands and package management|
-| orchestrator            | Main agent orchestration           |
-| python                  | Python environment and execution   |
-| skill-creator           | Skill creation guide               |
-| slack                   | Slack thread fetch and search      |
-| terraform               | Terraform development guide        |
 
 ### 4.3. Agents
 
