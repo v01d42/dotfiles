@@ -55,6 +55,7 @@ Skills are stored in the `skills/` directory for specific integrations.
 | github                  | GitHub and PR operations guide     |
 | go                      | Golang environment and execution   |
 | nix                     | Nix commands and package management|
+| python                  | Python environment and execution   |
 
 ### 4.3. Agents
 
