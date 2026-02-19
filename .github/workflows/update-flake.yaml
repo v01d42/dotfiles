@@ -45,7 +45,7 @@ jobs:
 
       - name: Discover flake inputs
         id: discover
-        uses: ./.github/discover-flake-inputs
+        uses: ./.github/actions/discover-flake-inputs
 
   update:
     needs: discover
