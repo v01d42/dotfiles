@@ -24,6 +24,10 @@ inputs:
     description: 'Enable auto-merge for the PR'
     required: false
     default: 'true'
+  auto-merge-retries:
+    description: 'Number of times to retry enabling auto-merge on failure'
+    required: false
+    default: '3'
   github-token:
     description: 'GitHub token for creating PRs and enabling auto-merge'
     required: true
@@ -185,6 +189,7 @@ runs:
         CURRENT_VERSION: ${{ inputs.current-version }}
         NEW_VERSION: ${{ steps.update.outputs.new_version }}
         AUTO_MERGE: ${{ inputs.auto-merge }}
+        AUTO_MERGE_RETRIES: ${{ inputs.auto-merge-retries }}
         CURRENT_PKG_VERSIONS: ${{ steps.update.outputs.current_pkg_versions }}
         NEW_PKG_VERSIONS: ${{ steps.update.outputs.new_pkg_versions }}
         PKG_VERSION_DIFF: ${{ steps.update.outputs.pkg_version_diff }}
@@ -286,7 +291,19 @@ runs:
         # Enable auto-merge if requested
         if [ "$AUTO_MERGE" = "true" ] && [ -n "$pr_number" ]; then
           echo "Enabling auto-merge for PR #$pr_number"
-          gh pr merge "$pr_number" --auto --squash || echo "Note: Auto-merge may require branch protection rules"
+          attempt=0
+          while [ "$attempt" -lt "$AUTO_MERGE_RETRIES" ]; do
+            attempt=$((attempt + 1))
+            if gh pr merge "$pr_number" --auto --squash; then
+              break
+            fi
+            if [ "$attempt" -eq "$AUTO_MERGE_RETRIES" ]; then
+              echo "Failed to enable auto-merge after $AUTO_MERGE_RETRIES attempts"
+              exit 1
+            fi
+            echo "Retrying auto-merge in 10s... (attempt $attempt/$AUTO_MERGE_RETRIES)"
+            sleep 10
+          done
         fi
 
         pr_url=$(gh pr view "$pr_number" --json url --jq '.url')
