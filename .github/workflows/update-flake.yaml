@@ -35,8 +35,8 @@ jobs:
   discover:
     runs-on: ubuntu-24.04
     outputs:
-      matrix: ${{ steps.discover.output.matrix }}
-      has-updates: ${{ steps.discover.output.has-updates }}
+      matrix: ${{ steps.discover.outputs.matrix }}
+      has-updates: ${{ steps.discover.outputs.has-updates }}
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
@@ -48,15 +48,15 @@ jobs:
         uses: ./.github/discover-flake-inputs
 
   update:
-    need: discover
-    if: need.discover.outputs.has-updates == 'true'
+    needs: discover
+    if: needs.discover.outputs.has-updates == 'true'
     runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
-      matrix: ${{ fromJson(need.discover.outputs.matrix) }}
+      matrix: ${{ fromJson(needs.discover.outputs.matrix) }}
     permissions:
-      context: write
-      pull-request: write
+      contents: write
+      pull-requests: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
