@@ -54,6 +54,7 @@ in {
 
         # Search
         pkgs.fd
+        pkgs.fzf
 
         # File viewers
         pkgs.jq
