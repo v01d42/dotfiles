@@ -13,8 +13,6 @@ autoload -Uz _zinit
 # theme
 zinit ice pick"async.zsh" src"pure.zsh"
 zinit light sindresorhus/pure
-# syntax-highlighting
-zinit light zsh-users/zsh-syntax-highlighting
 # auto-completions
 zinit light zsh-users/zsh-autosuggestions
 zinit light zsh-users/zsh-completions

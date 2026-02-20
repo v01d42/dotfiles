@@ -116,7 +116,7 @@ in {
     # "vde".source = symlink "${dotfilesDir}/config/vde";
     "vim".source = symlink "${dotfilesDir}/config/vim";
     # "wezterm".source = symlink "${dotfilesDir}/config/wezterm";
-    # "zeno".source = symlink "${dotfilesDir}/config/zeno";
+    "zeno".source = symlink "${dotfilesDir}/config/zeno";
     "zsh".source = symlink "${dotfilesDir}/config/zsh";
   };
 
