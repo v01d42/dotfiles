@@ -27,6 +27,19 @@ fi
 # Initialize completion system
 autoload -Uz compinit && compinit
 
+# install zeno.zsh
+zinit ice lucid depth"1" blockf
+zinit light yuki-yano/zeno.zsh
+
+if [[ -n "${ZENO_LOADED}" ]]; then
+  bindkey " "  zeno-auto-snippet
+  bindkey "^m" zeno-auto-snippet-and-accept-line
+  bindkey "^i" zeno-completion
+  bindkey "^g" zeno-ghq-cd
+  bindkey "^r" zeno-history-selection
+  bindkey "^x^i" zeno-insert-snippet
+fi
+
 # kubectl completion (if available)
 if command -v kubectl &> /dev/null; then
   source <(kubectl completion zsh)

@@ -1,0 +1,10 @@
+snippets:
+  - name: ll
+    keyword: ll
+    snippet: ls -aFlv
+
+  - name: (ghq) update
+    keyword: gu
+    snippet:
+      # ghq list | ghq get --update --parallel
+      ghq list | ghq get --update
