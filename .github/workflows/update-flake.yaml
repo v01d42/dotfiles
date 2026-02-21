@@ -8,6 +8,9 @@ on:
 jobs:
   update:
     uses: ./.github/workflows/_update-flake-reusable.yaml
+    permissions:
+      contents: write
+      pull-requests: write
     with:
       summary-title: 'Stable Update Summary'
     secrets:
