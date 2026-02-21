@@ -4,12 +4,6 @@ on:
   schedule:
     - cron: '0 6 * * *'
   workflow_dispatch:
-    inputs:
-      summary-title:
-        description: 'Title for the summary section'
-        required: false
-        type: string
-        default: 'Update Summary'
 
 jobs:
   update:
