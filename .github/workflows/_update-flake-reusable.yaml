@@ -1,7 +1,7 @@
 name: 'Reusable: Update flake inputs'
 
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
       pr-labels:
         description: 'Labels to add to PRs'
