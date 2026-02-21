@@ -1,0 +1,111 @@
+name: 'Reusable: Update flake inputs'
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr-labels:
+        description: 'Labels to add to PRs'
+        required: false
+        type: string
+        default: 'dependency,automated'
+      auto-merge:
+        description: 'Enable auto-merge for PRs'
+        required: false
+        type: boolean
+        default: true
+      summary-title:
+        description: 'Title for the summary section'
+        required: false
+        type: string
+        default: 'Update Summary'
+    secrets:
+      app-id:
+        description: 'Github App ID for bot identity'
+        required: true
+      private-key:
+        description: 'Github App private key for bot identity'
+        required: true
+      cachix-auth-token:
+        description: 'Cachix authentication token'
+        required: true
+
+jobs:
+  discover:
+    runs-on: ubuntu-24.04
+    outputs:
+      matrix: ${{ steps.discover.outputs.matrix }}
+      has-updates: ${{ steps.discover.outputs.has-updates }}
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Setup Nix
+        uses: ./.github/actions/setup-nix
+
+      - name: Discover flake inputs
+        id: discover
+        uses: ./.github/actions/discover-flake-inputs
+
+  update:
+    needs: discover
+    if: needs.discover.outputs.has-updates == 'true'
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.discover.outputs.matrix) }}
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Set up git bot identity
+        id: bot
+        uses: ./.github/actions/setup-git-bot
+        with:
+          app-id: ${{ secrets.app-id }}
+          private-key: ${{ secrets.private-key }}
+
+      - name: Checkout repository (with bot token)
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          token: ${{ steps.bot.outputs.token }}
+
+      - name: Setup Nix
+        uses: ./.github/actions/setup-nix
+        with:
+          cachix-auth-token: ${{ secrets.cachix-auth-token }}
+
+      - name: Update flake input
+        id: update
+        uses: ./.github/actions/update-flake-input
+        with:
+          input-name: ${{ matrix.name }}
+          current-version: ${{ matrix.current-version }}
+          owner: ${{ matrix.owner }}
+          repo: ${{ matrix.repo }}
+          ref: ${{ matrix.ref }}
+          auto-merge: ${{ inputs.auto-merge }}
+          github-token: ${{ steps.bot.outputs.token }}
+
+  summary:
+    needs: [discover, update]
+    runs-on: ubuntu-24.04
+    if: always() && needs.discover.outputs.has-updates == 'true'
+    steps:
+      - name: Generate summary
+        env:
+          SUMMARY_TITLE: ${{ inputs.summary-title }}
+          AUTO_MERGE: ${{ inputs.auto-merge }}
+          UPDATE_RESULT: ${{ needs.update.result }}
+        run: |
+          echo "## $SUMMARY_TITLE" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Configuration" >> $GITHUB_STEP_SUMMARY
+          echo "- Auto-merge: $AUTO_MERGE" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "$UPDATE_RESULT" = "failure" ]; then
+            echo ":warning: Some updates failed. Check individual job logs for details." >> $GITHUB_STEP_SUMMARY
+          else
+            echo ":white_check_mark: All update jobs completed." >> $GITHUB_STEP_SUMMARY
+          fi
