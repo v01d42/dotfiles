@@ -21,8 +21,9 @@
   # customPkgs = {}
 in {
   imports = [
-    ./editorconfig.nix
-    ./git.nix
+    ./modules/editorconfig.nix
+    ./modules/efm-langserver.nix
+    ./modules/git.nix
   ];
   home = {
     # User info
@@ -72,6 +73,7 @@ in {
 
         # Linters & Formatters
         pkgs.alejandra
+        pkgs.efm-langserver
 
         # LSP
 
