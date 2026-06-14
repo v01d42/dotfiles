@@ -95,13 +95,13 @@ in {
       ++ [
         pkgs.claude-code
         llmAgentsPkgs.ccusage
-        # llmAgentsPkgs.codex  # TODO: build failure in upstream
+        llmAgentsPkgs.codex
         # llmAgentsPkgs.copilot-cli
         # llmAgentsPkgs.gemini-cli  # TODO: hash mismatch in upstream
       ];
     file = {
       ".claude/skills".source = symlink "${dotfilesDir}/config/claude/skills";
-      # ".codex".source = symlink "${dotfilesDir}/config/codex";
+      ".codex".source = symlink "${dotfilesDir}/config/codex";
     };
   };
 
