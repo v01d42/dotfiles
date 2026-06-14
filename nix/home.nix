@@ -102,7 +102,6 @@ in {
     file = {
       ".claude/skills".source = symlink "${dotfilesDir}/config/claude/skills";
       # ".codex".source = symlink "${dotfilesDir}/config/codex";
-      ".zshenv".source = symlink "${dotfilesDir}/config/zsh/.zshenv";
     };
   };
 
@@ -174,11 +173,24 @@ in {
           fi
         fi
 
+        # Home-manager session variables (standalone HM without nix-darwin, Linux only)
+        if [ -f "/etc/profiles/per-user/''${USER}/etc/profile.d/hm-session-vars.sh" ]; then
+          source "/etc/profiles/per-user/''${USER}/etc/profile.d/hm-session-vars.sh"
+        fi
+
         # locale
         if locale -a 2>/dev/null | grep -q "en_US.UTF-8"; then
           export LC_ALL=en_US.UTF-8
         else
           export LC_ALL=C.UTF-8
+        fi
+
+        # PATH deduplication (prevents duplicates in nested shells, e.g. tmux)
+        typeset -U path PATH
+
+        # Linux snap
+        if [[ -d /snap/bin ]]; then
+          export PATH="''${PATH}":/snap/bin
         fi
 
         # Homebrew PATH (macOS only)
