@@ -45,7 +45,6 @@ in {
     packages =
       lib.optionals pkgs.stdenv.isLinux [
         pkgs.zsh
-        pkgs.wslu
       ]
       ++ [
         # Version Manager
