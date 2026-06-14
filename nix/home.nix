@@ -9,7 +9,7 @@
   # Platform-agnostic paths
   homeDir =
     if pkgs.stdenv.isDarwin
-    then "Users/${username}"
+    then "/Users/${username}"
     else "/home/${username}";
   ghqRoot = "${homeDir}/ghq";
   dotfilesDir = "${ghqRoot}/github.com/v01d42/dotfiles";
