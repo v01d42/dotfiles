@@ -20,6 +20,13 @@ zinit light zsh-users/zsh-completions
 # direnv hook (if not already loaded by home-manager)
 if [[ -z "$DIRENV_DIR" ]] && command -v direnv &> /dev/null; then
   eval "$(direnv hook zsh)"
+  # Override to use PATH direnv instead of the hardcoded nix store path,
+  # so sessions survive nix GC removing the old store path.
+  _direnv_hook() {
+    trap -- '' SIGINT
+    eval "$(direnv export zsh)"
+    trap - SIGINT
+  }
 fi
 
 # Initialize completion system
