@@ -1,2 +1,9 @@
-model = "o4-mini"
+model = "gpt-5.5"
 approval-mode = "suggest"
+model_reasoning_effort = "high"
+
+[projects."/home/v01d"]
+trust_level = "trusted"
+
+[tui.model_availability_nux]
+"gpt-5.5" = 4
