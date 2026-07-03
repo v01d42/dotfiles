@@ -33,7 +33,7 @@ fi
 autoload -Uz compinit && compinit
 
 # install zeno.zsh
-zinit ice lucid depth"1" blockf atclone"npm install" atpull"npm install"
+zinit ice lucid depth"1" blockf
 zinit light yuki-yano/zeno.zsh
 
 if [[ -n "${ZENO_LOADED}" ]]; then
