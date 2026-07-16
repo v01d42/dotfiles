@@ -23,6 +23,8 @@
 
     # AI coding agents
     llm-agents.url = "github:numtide/llm-agents.nix";
+
+    herdr.url = "github:ogulcancelik/herdr";
   };
 
   outputs = {
@@ -31,6 +33,7 @@
     home-manager,
     claude-code-overlay,
     llm-agents,
+    herdr,
     ...
     }: let
       systems = ["x86_64-linux" "aarch64-darwin"];
@@ -62,6 +65,7 @@
         extraSpecialArgs = {
           inherit username;
           llmAgentsPkgs = llm-agents.packages.${system};
+          herdrPkg = herdr.packages.${system}.default;
         };
         modules = [
           ./nix/home.nix

@@ -4,6 +4,7 @@
   lib,
   username,
   llmAgentsPkgs,
+  herdrPkg,
   ...
 }: let
   # Platform-agnostic paths
@@ -16,7 +17,6 @@
 
   # Direct symlink (not via Nix store)
   symlink = config.lib.file.mkOutOfStoreSymlink;
-
   # Custom packages
   # customPkgs = {}
 in {
@@ -94,6 +94,7 @@ in {
       # AI coding agent
       ++ [
         pkgs.claude-code
+        herdrPkg
         llmAgentsPkgs.ccusage
         llmAgentsPkgs.codex
         # llmAgentsPkgs.copilot-cli
@@ -101,7 +102,7 @@ in {
       ];
     file = {
       ".claude/skills".source = symlink "${dotfilesDir}/config/claude/skills";
-      ".codex".source = symlink "${dotfilesDir}/config/codex";
+      ".codex/config.toml".source = symlink "${dotfilesDir}/config/codex/config.toml";
     };
   };
 
@@ -241,6 +242,16 @@ in {
     ghqListEssential = "${dotfilesDir}/nix/ghq-list-essential.txt";
     tpmDir = "${dotfilesDir}/config/tmux/plugins/tpm";
   in {
+    migrateCodexConfigDir = lib.hm.dag.entryBefore ["checkLinkTargets"] ''
+      codex_dir="${homeDir}/.codex"
+      codex_target="$(${pkgs.coreutils}/bin/readlink -f "$codex_dir" 2>/dev/null || true)"
+      if [ -L "$codex_dir" ] && [ "$codex_target" = "${dotfilesDir}/config/codex" ]; then
+        echo "Migrating ~/.codex from directory symlink to managed config.toml symlink..."
+        ${pkgs.coreutils}/bin/rm "$codex_dir"
+        ${pkgs.coreutils}/bin/mkdir -p "$codex_dir"
+      fi
+    '';
+
     # 0. Clean temporary files (node caches for security)
     cleanTemporaryFiles = lib.hm.dag.entryAfter ["writeBoundary"] ''
       echo "Cleaning temporary files..."
