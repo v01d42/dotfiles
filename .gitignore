@@ -1,0 +1,3 @@
+# codex runtime state (~/.codex was formerly symlinked to this dir)
+config/codex/*
+!config/codex/config.toml
