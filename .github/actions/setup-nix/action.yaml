@@ -11,12 +11,21 @@ runs:
       uses: cachix/install-nix-action@2126ae7fc54c9df00dd18f7f18754393182c73cd # v31.9.1
       with:
         github_access_token: ${{ github.token }}
-        extra_nix_config: |
-          extra-substituters = https://cache.numtide.com
-          extra-trusted-public-keys = niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g=
 
     - name: Setup Cachix (v01d42)
       uses: cachix/cachix-action@3ba601ff5bbb07c7220846facfa2cd81eeee15a1 # v16
       with:
         name: v01d42
         authToken: ${{ inputs.cachix-auth-token }}
+
+    # Must run after cachix-action: `cachix use` rewrites the whole
+    # `substituters` list in the user nix.conf, which drops substituters
+    # configured at the system level via extra_nix_config.
+    - name: Setup numtide binary cache (llm-agents.nix)
+      shell: bash
+      run: |
+        mkdir -p "$HOME/.config/nix"
+        {
+          echo 'extra-substituters = https://cache.numtide.com'
+          echo 'extra-trusted-public-keys = niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g='
+        } >> "$HOME/.config/nix/nix.conf"
