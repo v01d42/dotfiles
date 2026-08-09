@@ -63,6 +63,11 @@ in {
         pkgs.unzip
         pkgs.wget
 
+        # Cloud & Infrastructure
+        pkgs.awscli2
+        pkgs.aws-vault
+        pkgs.tenv
+
         # Language Runtimes
         pkgs.deno
         pkgs.go
