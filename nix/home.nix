@@ -66,6 +66,9 @@ in {
         # Cloud & Infrastructure
         pkgs.awscli2
         pkgs.aws-vault
+        pkgs.gnupg
+        pkgs.pass
+        pkgs.pinentry-curses
         pkgs.tenv
 
         # Language Runtimes
@@ -146,6 +149,7 @@ in {
       # Environment variables
       sessionVariables = {
         # CLAUDE_CONFIG_DIR = "${dotfilesDir}/config/claude";
+        AWS_VAULT_BACKEND = "pass";
         DENO_NO_PROMPT = "1";
         DENO_NO_UPDATE_CHECK = "1";
         EDITOR = "vim";
@@ -212,6 +216,10 @@ in {
 
       # ~/.zshrc additions
       initContent = ''
+        # Keep GPG pinentry attached to the current terminal for pass/aws-vault.
+        export GPG_TTY="$TTY"
+        gpg-connect-agent updatestartuptty /bye >/dev/null 2>&1
+
         # Disable Ctrl-D to exit
         setopt IGNORE_EOF
 
