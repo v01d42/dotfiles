@@ -152,6 +152,10 @@ in {
         AWS_VAULT_BACKEND = "pass";
         DENO_NO_PROMPT = "1";
         DENO_NO_UPDATE_CHECK = "1";
+        # Workaround for https://github.com/NixOS/nixpkgs/issues/550181:
+        # jsr:@db/sqlite dlopen()s libsqlite3.so, which conflicts with the
+        # one deno itself is already linked against unless we pin it.
+        DENO_SQLITE_PATH = "${pkgs.sqlite.out}/lib/libsqlite3.so";
         EDITOR = "vim";
         # FZF_DEFAULT_OPTS = "--reverse --bind 'ctrl-y:accept'";
         NVIM_APPNAME = "nvim";

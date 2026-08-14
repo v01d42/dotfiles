@@ -56,7 +56,6 @@
           config.allowUnfree = true;
           overlays = [
             claude-code-overlay.overlays.default
-            (import ./nix/overlays/deno.nix)
           ];
         };
         username = builtins.getEnv "USER";
