@@ -49,6 +49,7 @@ in {
       ++ [
         # Version Manager
         pkgs.gh
+        pkgs.glab
         pkgs.ghq
         pkgs.lazygit
 
@@ -91,6 +92,7 @@ in {
         # Build tools
         pkgs.cmake
         pkgs.gcc
+        pkgs.gnumake
 
         # containers
         pkgs.docker
@@ -149,7 +151,9 @@ in {
       # Environment variables
       sessionVariables = {
         # CLAUDE_CONFIG_DIR = "${dotfilesDir}/config/claude";
+        AWS_SESSION_TOKEN_TTL = "3h";
         AWS_VAULT_BACKEND = "pass";
+        AWS_VAULT_PASS_PREFIX = "aws-vault";
         DENO_NO_PROMPT = "1";
         DENO_NO_UPDATE_CHECK = "1";
         # Workaround for https://github.com/NixOS/nixpkgs/issues/550181:
@@ -266,6 +270,17 @@ in {
         echo "Migrating ~/.codex from directory symlink to managed config.toml symlink..."
         ${pkgs.coreutils}/bin/rm "$codex_dir"
         ${pkgs.coreutils}/bin/mkdir -p "$codex_dir"
+      fi
+
+      # codex rewrites its own config.toml (project trust, hooks state, model
+      # choice, ...) via write-then-rename, which replaces our symlink with a
+      # plain file. Fold that live state back into the tracked source before
+      # home-manager tries (and fails) to re-create the symlink.
+      codex_config="${homeDir}/.codex/config.toml"
+      if [ -f "$codex_config" ] && [ ! -L "$codex_config" ]; then
+        echo "codex replaced the managed config.toml symlink; syncing state back to dotfiles..."
+        ${pkgs.coreutils}/bin/cp "$codex_config" "${dotfilesDir}/config/codex/config.toml"
+        ${pkgs.coreutils}/bin/rm "$codex_config"
       fi
     '';
 

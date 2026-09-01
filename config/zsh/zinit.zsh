@@ -54,3 +54,7 @@ if command -v kubectl &> /dev/null; then
   source <(kubectl completion zsh)
   alias k=kubectl
 fi
+
+if command -v aws-vault &> /dev/null; then
+  eval "$(aws-vault --completion-script-zsh)"
+fi
