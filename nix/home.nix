@@ -3,6 +3,7 @@
   pkgs,
   lib,
   username,
+  profile,
   llmAgentsPkgs,
   herdrPkg,
   ...
@@ -49,7 +50,6 @@ in {
       ++ [
         # Version Manager
         pkgs.gh
-        pkgs.glab
         pkgs.ghq
         pkgs.lazygit
 
@@ -106,9 +106,15 @@ in {
         pkgs.claude-code
         herdrPkg
         llmAgentsPkgs.ccusage
-        llmAgentsPkgs.codex
         # llmAgentsPkgs.copilot-cli
         # llmAgentsPkgs.gemini-cli  # TODO: hash mismatch in upstream
+      ]
+      # Profile-specific packages
+      ++ lib.optionals (profile == "1") [
+        llmAgentsPkgs.codex
+      ]
+      ++ lib.optionals (profile == "2") [
+        pkgs.glab
       ];
     file = {
       ".claude/skills".source = symlink "${dotfilesDir}/config/claude/skills";

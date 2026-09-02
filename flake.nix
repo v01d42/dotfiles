@@ -38,35 +38,26 @@
     llm-agents,
     herdr,
     ...
-    }: let
-      systems = ["x86_64-linux" "aarch64-darwin"];
-      forAllSystems = nixpkgs.lib.genAttrs systems;
-    in {
+  }: let
+    systems = ["x86_64-linux" "aarch64-darwin"];
+    forAllSystems = nixpkgs.lib.genAttrs systems;
 
-      formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
-
-      # Custom packages
-
-      # nix develop
-      # devShells = forAllSystems ()
-
-      # home-manager switch --flake '.#ubuntu' --impure
-      # For Ubuntu / WSL2
-      homeConfigurations."ubuntu" = let
-        system = "x86_64-linux";
-        pkgs = import nixpkgs{
-          inherit system;
-          config.allowUnfree = true;
-          overlays = [
-            claude-code-overlay.overlays.default
-          ];
-        };
-        username = builtins.getEnv "USER";
-      in
-        home-manager.lib.homeManagerConfiguration {
+    # For Ubuntu / WSL2
+    mkUbuntuHome = {profile}: let
+      system = "x86_64-linux";
+      pkgs = import nixpkgs {
+        inherit system;
+        config.allowUnfree = true;
+        overlays = [
+          claude-code-overlay.overlays.default
+        ];
+      };
+      username = builtins.getEnv "USER";
+    in
+      home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         extraSpecialArgs = {
-          inherit username;
+          inherit username profile;
           llmAgentsPkgs = llm-agents.packages.${system};
           herdrPkg = herdr.packages.${system}.default;
         };
@@ -74,5 +65,16 @@
           ./nix/home.nix
         ];
       };
-    };
+  in {
+    formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
+
+    # Custom packages
+
+    # nix develop
+    # devShells = forAllSystems ()
+
+    # home-manager switch --flake '.#ubuntu-<profile>' --impure
+    homeConfigurations."ubuntu-1" = mkUbuntuHome {profile = "1";};
+    homeConfigurations."ubuntu-2" = mkUbuntuHome {profile = "2";};
+  };
 }

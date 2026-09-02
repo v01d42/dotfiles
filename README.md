@@ -37,8 +37,14 @@ My personal dotfiles managed with Nix and home-manager.
 
 3. Apply Home Manager configuration:
 
+   This flake exposes two profiles (`ubuntu-1` and `ubuntu-2`) with mostly
+   identical packages, differing only in a few machine-specific extras.
+   Pick whichever profile matches this machine:
+
    ```sh
-   nix run home-manager -- switch --flake '.#ubuntu' --impure
+   nix run home-manager -- switch --flake '.#ubuntu-1' --impure
+   # or
+   nix run home-manager -- switch --flake '.#ubuntu-2' --impure
    ```
 
 4. Set zsh as default shell:
