@@ -10,7 +10,7 @@
 }: let
   # Platform-agnostic paths
   homeDir =
-    if pkgs.stdenv.isDarwin
+    if pkgs.stdenv.hostPlatform.isDarwin
     then "/Users/${username}"
     else "/home/${username}";
   ghqRoot = "${homeDir}/ghq";
@@ -44,7 +44,7 @@ in {
 
     # User packages
     packages =
-      lib.optionals pkgs.stdenv.isLinux [
+      lib.optionals pkgs.stdenv.hostPlatform.isLinux [
         pkgs.zsh
       ]
       ++ [
@@ -295,7 +295,7 @@ in {
       echo "Cleaning temporary files..."
       # Node.js caches
       rm -rf "${homeDir}/.npm"
-      ${lib.optionalString pkgs.stdenv.isDarwin ''
+      ${lib.optionalString pkgs.stdenv.hostPlatform.isDarwin ''
         rm -rf "${homeDir}/Library/Caches/deno"
         ${fd} ".DS_Store" ${ghqRoot} --hidden --no-ignore | xargs rm -f || true
         /usr/bin/xattr -rc ${ghqRoot} || true
@@ -315,7 +315,7 @@ in {
     # 2. Start ssh-agent if not running (Linux only)
     # cf. https://inno-tech-life.com/dev/infra/wsl2-ssh-agent/
     # startSshAgent = lib.hm.dag.entryAfter ["writeBoundary"] (
-    #   lib.optionalString pkgs.stdenv.isLinux ''
+    #   lib.optionalString pkgs.stdenv.hostPlatform.isLinux ''
     #     if [ -z "''${SSH_AUTH_SOCK:-}" ]; then
     #       eval $(${pkgs.openssh}/bin/ssh-agent)
     #     fi
