@@ -31,7 +31,7 @@ acknowledge with a random one-liner in character.
 
 Files and directories described below are located at:
 
-@~/ghq/github.com/i9wa4/dotfiles/config/claude/
+@~/ghq/github.com/v01d42/dotfiles/config/claude/
 
 ### 4.1. Rules
 
@@ -48,33 +48,13 @@ Claude Code auto-loads these. Codex CLI should reference as needed.
 
 Skills are stored in the `skills/` directory for specific integrations.
 
-| Skill                   | Description                        |
-| ----------------------- | ---------------------------------- |
-| draw-io                 | draw.io diagram creation/editing   |
-| git                     | Git operations guide               |
-| github                  | GitHub and PR operations guide     |
-| go                      | Golang environment and execution   |
-| nix                     | Nix commands and package management|
-| python                  | Python environment and execution   |
-
-### 4.3. Agents
-
-Agents are stored in the `agents/` directory.
-
-| Agent                 | Description                                |
-| --------------------- | ------------------------------------------ |
-| reviewer-architecture | Design patterns and structure review       |
-| reviewer-code         | Code quality, readability, maintainability |
-| reviewer-data         | Data quality and schema review             |
-| reviewer-historian    | Issue/PR history and commit context        |
-| reviewer-qa           | QA and test coverage review                |
-| reviewer-security     | Security vulnerability review              |
-| researcher-tech       | Technical research and analysis            |
-
-### 4.4. Commands
-
-Slash commands are stored in `commands/` and loaded on invocation.
-
-| Command                             | Description                            |
-| ----------------------------------- | -------------------------------------- |
-| restricted-bigquery-dbt-environment | Restricted BigQuery dbt environment    |
+| Skill       | Description                            |
+| ----------- | --------------------------------------- |
+| draw-io     | draw.io diagram creation/editing        |
+| git         | Git operations guide                    |
+| go          | Golang environment and execution        |
+| grilling    | Stress-test a plan, decision, or idea   |
+| i-have-adhd | Shape output for ADHD-friendly reading  |
+| nix         | Nix commands and package management     |
+| ponytail    | Force the laziest working solution      |
+| python      | Python environment and execution        |

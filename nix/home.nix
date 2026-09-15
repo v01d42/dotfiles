@@ -126,16 +126,10 @@ in {
   };
 
   xdg.configFile = {
-    # "ccstatusline".source = symlink "${dotfilesDir}/config/ccstatusline";
-    # "claude".source = symlink "${dotfilesDir}/config/claude";
-    # "efm-langserver".source = symlink "${dotfilesDir}/config/efm-langserver";
     "nvim".source = symlink "${dotfilesDir}/config/nvim";
-    # "rumdl/rumdl.toml".source = symlink "${dotfilesDir}/.rumdl.toml";
     # "skk".source = symlink "${dotfilesDir}/config/skk";
     # "tmux".source = symlink "${dotfilesDir}/config/tmux";
-    # "vde".source = symlink "${dotfilesDir}/config/vde";
     "vim".source = symlink "${dotfilesDir}/config/vim";
-    # "wezterm".source = symlink "${dotfilesDir}/config/wezterm";
     "zeno".source = symlink "${dotfilesDir}/config/zeno";
     "zsh".source = symlink "${dotfilesDir}/config/zsh";
   };
@@ -250,7 +244,6 @@ in {
         source ${dotfilesDir}/config/zsh/keybind.zsh
         source ${dotfilesDir}/config/zsh/zinit.zsh
         source ${dotfilesDir}/config/zsh/prompt.zsh
-        # source ${dotfilesDir}/config/zsh/aws.zsh
 
         # Local config
         if [[ -f ~/.zshrc.local ]]; then
@@ -260,9 +253,6 @@ in {
     };
   };
 
-  # ============================================================================
-  # Activation scripts (run on darwin-rebuild switch / home-manager switch)
-  # ============================================================================
   home.activation = let
     npm = "${pkgs.nodejs}/bin/npm";
     npmPrefix = "${homeDir}/.local";
@@ -273,27 +263,6 @@ in {
     ghqListEssential = "${dotfilesDir}/nix/ghq-list-essential.txt";
     tpmDir = "${dotfilesDir}/config/tmux/plugins/tpm";
   in {
-    migrateCodexConfigDir = lib.hm.dag.entryBefore ["checkLinkTargets"] ''
-      codex_dir="${homeDir}/.codex"
-      codex_target="$(${pkgs.coreutils}/bin/readlink -f "$codex_dir" 2>/dev/null || true)"
-      if [ -L "$codex_dir" ] && [ "$codex_target" = "${dotfilesDir}/config/codex" ]; then
-        echo "Migrating ~/.codex from directory symlink to managed config.toml symlink..."
-        ${pkgs.coreutils}/bin/rm "$codex_dir"
-        ${pkgs.coreutils}/bin/mkdir -p "$codex_dir"
-      fi
-
-      # codex rewrites its own config.toml (project trust, hooks state, model
-      # choice, ...) via write-then-rename, which replaces our symlink with a
-      # plain file. Fold that live state back into the tracked source before
-      # home-manager tries (and fails) to re-create the symlink.
-      codex_config="${homeDir}/.codex/config.toml"
-      if [ -f "$codex_config" ] && [ ! -L "$codex_config" ]; then
-        echo "codex replaced the managed config.toml symlink; syncing state back to dotfiles..."
-        ${pkgs.coreutils}/bin/cp "$codex_config" "${dotfilesDir}/config/codex/config.toml"
-        ${pkgs.coreutils}/bin/rm "$codex_config"
-      fi
-    '';
-
     # Claude Code rewrites ~/.claude/settings.json at runtime (permission
     # grants, MCP entries, project trust, ...), so it can't be a symlink like
     # ~/.claude/skills. Instead, upsert just our own PostToolUse hook entry
