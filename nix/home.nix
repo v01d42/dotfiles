@@ -118,6 +118,9 @@ in {
       ];
     file = {
       ".claude/skills".source = symlink "${dotfilesDir}/config/claude/skills";
+      # Individual file, not the whole ".claude/hooks" dir: herdr owns that
+      # directory and writes its own hook script into it directly.
+      ".claude/hooks/lint-ai-words.sh".source = symlink "${dotfilesDir}/config/claude/hooks/lint-ai-words.sh";
       ".codex/config.toml".source = symlink "${dotfilesDir}/config/codex/config.toml";
     };
   };
@@ -329,6 +332,8 @@ in {
       NPM_PACKAGES=(
         "@devcontainers/cli"
         "vde-layout"
+        "textlint"
+        "textlint-rule-preset-ai-words-ja"
       )
 
       # Install missing packages
