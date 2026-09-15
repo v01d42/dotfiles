@@ -1,9 +1,56 @@
-model = "gpt-5.5"
+model = "gpt-5.6-sol"
 approval-mode = "suggest"
-model_reasoning_effort = "high"
+model_reasoning_effort = "medium"
 
 [projects."/home/v01d"]
 trust_level = "trusted"
 
+[projects."/home/v01d/ghq/github.com/v01d42/pokemon-ai-battle-challenge"]
+trust_level = "trusted"
+
+[projects."/home/v01d/ghq/github.com/v01d42/pokeka_kaggle_starterRepository"]
+trust_level = "trusted"
+
+[projects."/home/v01d/ghq/github.com/v01d42/dotfiles"]
+trust_level = "trusted"
+
+[features]
+hooks = true
+
+[hooks.state]
+
+[hooks.state."/home/v01d/.codex/hooks.json:session_start:0:0"]
+trusted_hash = "sha256:cb60e3583a976e36d75919be094cca0392f6696f12988bdc9605c0cc3e334837"
+enabled = true
+
+[hooks.state."/home/v01d/.codex/hooks.json:session_start:1:0"]
+enabled = true
+trusted_hash = "sha256:11dcf759d954b4fc09540ea521abcd1255781ceba01d3818e9ecc5e784dcf825"
+[hooks.state."/home/v01d/.codex/hooks.json:user_prompt_submit:0:0"]
+enabled = true
+trusted_hash = "sha256:98cb9074a894e87ade01e3503ffa7b0f46b200538ea68b6e11e5c0411803098f"
+[hooks.state."/home/v01d/.codex/hooks.json:pre_tool_use:0:0"]
+enabled = true
+trusted_hash = "sha256:831a140e99a36c9bfe2e08ba4075f80f48dad1fe23db42943890ead9e4795b66"
+[hooks.state."/home/v01d/.codex/hooks.json:permission_request:0:0"]
+enabled = true
+trusted_hash = "sha256:90763c86d72848fe5567818f392cd3cdabbfa8b77802e78e6cc95e8ad2f0afdc"
+[hooks.state."/home/v01d/.codex/hooks.json:post_tool_use:0:0"]
+enabled = true
+trusted_hash = "sha256:ec4dcbb577ad97933545aa79d126e2e7cefdc4a1a133b1076dde9e85674e3439"
+[hooks.state."/home/v01d/.codex/hooks.json:subagent_start:0:0"]
+enabled = true
+trusted_hash = "sha256:3207641ce8145c0f3ba6f47557e44ee41b417bc8a16174e80a170c8a146849d1"
+[hooks.state."/home/v01d/.codex/hooks.json:subagent_stop:0:0"]
+enabled = true
+trusted_hash = "sha256:4499ad36c35789e985058dd1934b22c17271a25cdb56e2bdefb29ad53b048d0f"
+[hooks.state."/home/v01d/.codex/hooks.json:stop:0:0"]
+enabled = true
+trusted_hash = "sha256:b605484f09a6a72982a6a73228c40ae038759e7bf90c42667d66134ae32167ae"
+[projects."/home/v01d/ghq/github.com/v01d42/dotfiles-japanese-linter"]
+trust_level = "trusted"
+
 [tui.model_availability_nux]
 "gpt-5.5" = 4
+"gpt-5.6-sol" = 1
+gpt-6-astra = 1

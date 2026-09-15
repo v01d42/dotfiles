@@ -8,3 +8,7 @@ snippets:
     snippet:
       # ghq list | ghq get --update --parallel
       ghq list | ghq get --update
+
+  - name: (non-nix) update zinit/lazy.nvim
+    keyword: uu
+    snippet: 'echo "@@ phase 1/2: zinit update --all"; zinit update --all --no-pager; echo "@@ phase 1/2: done"; echo "@@ phase 2/2: nvim Lazy sync"; nvim --headless "+Lazy! sync" +qa; echo "@@ phase 2/2: done"'
