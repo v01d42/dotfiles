@@ -32,10 +32,9 @@ fi
 # Initialize completion system
 autoload -Uz compinit && compinit
 
-# install zeno.zsh
-# zinit の emulate スコープ下では zeno.zsh 後半 (deno バージョン判定周り) が
-# 完走せず ZENO_LOADED が set されない環境があるため、clone/update は zinit に
-# 任せ、初期化はネイティブ shell 上で再 source して完走させる。
+# zeno.zsh: under zinit's emulate scope, zeno.zsh's deno version check doesn't
+# always complete, leaving ZENO_LOADED unset. Let zinit handle clone/update
+# only, then re-source natively to finish initialization.
 zinit ice lucid depth"1" blockf
 zinit light yuki-yano/zeno.zsh
 [[ -z "${ZENO_LOADED}" ]] && source "${ZINIT[PLUGINS_DIR]}/yuki-yano---zeno.zsh/zeno.zsh"

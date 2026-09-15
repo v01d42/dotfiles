@@ -18,9 +18,8 @@ runs:
         name: v01d42
         authToken: ${{ inputs.cachix-auth-token }}
 
-    # Must run after cachix-action: `cachix use` rewrites the whole
-    # `substituters` list in the user nix.conf, which drops substituters
-    # configured at the system level via extra_nix_config.
+    # Must run after cachix-action: `cachix use` rewrites the whole `substituters`
+    # list, dropping substituters configured at the system level via extra_nix_config.
     - name: Setup numtide binary cache (llm-agents.nix)
       shell: bash
       run: |

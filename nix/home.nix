@@ -18,8 +18,6 @@
 
   # Direct symlink (not via Nix store)
   symlink = config.lib.file.mkOutOfStoreSymlink;
-  # Custom packages
-  # customPkgs = {}
 in {
   imports = [
     ./modules/editorconfig.nix
@@ -159,9 +157,8 @@ in {
         AWS_VAULT_PASS_PREFIX = "aws-vault";
         DENO_NO_PROMPT = "1";
         DENO_NO_UPDATE_CHECK = "1";
-        # Workaround for https://github.com/NixOS/nixpkgs/issues/550181:
-        # jsr:@db/sqlite dlopen()s libsqlite3.so, which conflicts with the
-        # one deno itself is already linked against unless we pin it.
+        # Workaround for https://github.com/NixOS/nixpkgs/issues/550181: jsr:@db/sqlite
+        # dlopen()s libsqlite3.so, conflicting with deno's own linked copy unless pinned.
         DENO_SQLITE_PATH = "${pkgs.sqlite.out}/lib/libsqlite3.so";
         EDITOR = "vim";
         # FZF_DEFAULT_OPTS = "--reverse --bind 'ctrl-y:accept'";
@@ -263,11 +260,9 @@ in {
     ghqListEssential = "${dotfilesDir}/nix/ghq-list-essential.txt";
     tpmDir = "${dotfilesDir}/config/tmux/plugins/tpm";
   in {
-    # Claude Code rewrites ~/.claude/settings.json at runtime (permission
-    # grants, MCP entries, project trust, ...), so it can't be a symlink like
-    # ~/.claude/skills. Instead, upsert just our own PostToolUse hook entry
-    # into the live file, matched by command substring, leaving every other
-    # key (and every other tool's hook entries) untouched.
+    # Claude Code rewrites ~/.claude/settings.json at runtime, so it can't be
+    # a symlink like .claude/skills. Upsert just our hook entry (matched by
+    # command substring), leaving everything else untouched.
     syncClaudeHooks = lib.hm.dag.entryAfter ["writeBoundary"] ''
       settings="${homeDir}/.claude/settings.json"
       hookEntry="${dotfilesDir}/config/claude/hooks/lint-ai-words.hook.json"
@@ -303,16 +298,6 @@ in {
         ${ghq} get -p < "${ghqListEssential}" || true
       fi
     '';
-
-    # 2. Start ssh-agent if not running (Linux only)
-    # cf. https://inno-tech-life.com/dev/infra/wsl2-ssh-agent/
-    # startSshAgent = lib.hm.dag.entryAfter ["writeBoundary"] (
-    #   lib.optionalString pkgs.stdenv.hostPlatform.isLinux ''
-    #     if [ -z "''${SSH_AUTH_SOCK:-}" ]; then
-    #       eval $(${pkgs.openssh}/bin/ssh-agent)
-    #     fi
-    #   ''
-    # );
 
     # 3. Install/update npm packages (after safe-chain, so they get scanned)
     installNpmPackages = lib.hm.dag.entryAfter ["writeBoundary"] ''

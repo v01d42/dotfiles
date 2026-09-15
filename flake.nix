@@ -68,11 +68,6 @@
   in {
     formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
 
-    # Custom packages
-
-    # nix develop
-    # devShells = forAllSystems ()
-
     # home-manager switch --flake '.#ubuntu-<profile>' --impure
     homeConfigurations."ubuntu-1" = mkUbuntuHome {profile = "1";};
     homeConfigurations."ubuntu-2" = mkUbuntuHome {profile = "2";};

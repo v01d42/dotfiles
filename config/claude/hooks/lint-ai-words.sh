@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
-# PostToolUse hook: run textlint-rule-preset-ai-words-ja on markdown files
-# edited via Edit/Write, so Claude sees and can fix AI-sounding Japanese
-# phrasing right after writing it.
+# PostToolUse hook: lints markdown edited via Edit/Write with textlint-rule-preset-ai-words-ja
+# to catch AI-sounding Japanese phrasing right after writing.
 # https://github.com/p1ass/textlint-rule-preset-ai-words-ja
 set -euo pipefail
 
