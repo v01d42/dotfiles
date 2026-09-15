@@ -269,6 +269,7 @@ in {
     ghq = "${pkgs.ghq}/bin/ghq";
     git = "${pkgs.git}/bin/git";
     fd = "${pkgs.fd}/bin/fd";
+    jq = "${pkgs.jq}/bin/jq";
     ghqListEssential = "${dotfilesDir}/nix/ghq-list-essential.txt";
     tpmDir = "${dotfilesDir}/config/tmux/plugins/tpm";
   in {
@@ -290,6 +291,25 @@ in {
         echo "codex replaced the managed config.toml symlink; syncing state back to dotfiles..."
         ${pkgs.coreutils}/bin/cp "$codex_config" "${dotfilesDir}/config/codex/config.toml"
         ${pkgs.coreutils}/bin/rm "$codex_config"
+      fi
+    '';
+
+    # Claude Code rewrites ~/.claude/settings.json at runtime (permission
+    # grants, MCP entries, project trust, ...), so it can't be a symlink like
+    # ~/.claude/skills. Instead, upsert just our own PostToolUse hook entry
+    # into the live file, matched by command substring, leaving every other
+    # key (and every other tool's hook entries) untouched.
+    syncClaudeHooks = lib.hm.dag.entryAfter ["writeBoundary"] ''
+      settings="${homeDir}/.claude/settings.json"
+      hookEntry="${dotfilesDir}/config/claude/hooks/lint-ai-words.hook.json"
+      if [ -f "$hookEntry" ]; then
+        [ -f "$settings" ] || echo '{}' > "$settings"
+        tmp="$(${pkgs.coreutils}/bin/mktemp)"
+        ${jq} --argjson entry "$(${jq} -c . "$hookEntry")" '
+          .hooks.PostToolUse = ((.hooks.PostToolUse // []) | map(select(((.hooks[0].command // "") | contains("lint-ai-words.sh")) | not))) + [$entry]
+        ' "$settings" > "$tmp"
+        ${pkgs.coreutils}/bin/cat "$tmp" > "$settings"
+        ${pkgs.coreutils}/bin/rm -f "$tmp"
       fi
     '';
 

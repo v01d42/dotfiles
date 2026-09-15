@@ -1,0 +1,10 @@
+{
+  "matcher": "Edit|Write",
+  "hooks": [
+    {
+      "type": "command",
+      "command": "bash \"$HOME/.claude/hooks/lint-ai-words.sh\"",
+      "timeout": 15
+    }
+  ]
+}
