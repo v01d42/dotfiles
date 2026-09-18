@@ -98,6 +98,8 @@ in {
         # k8s packages
         pkgs.kubectl
         pkgs.kind
+        pkgs.kubernetes-helm
+        pkgs.helmfile
       ]
       # AI coding agent
       ++ [
