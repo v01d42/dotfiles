@@ -1,3 +1,7 @@
 # codex runtime state (~/.codex was formerly symlinked to this dir)
 config/codex/*
 !config/codex/config.toml
+
+# Claude Code syncs Anthropic-managed skills into ~/.claude/skills, which
+# nix/home.nix symlinks to config/claude/skills. Own skills stay tracked.
+config/claude/skills/synced/
