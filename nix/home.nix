@@ -159,9 +159,6 @@ in {
         AWS_VAULT_PASS_PREFIX = "aws-vault";
         DENO_NO_PROMPT = "1";
         DENO_NO_UPDATE_CHECK = "1";
-        # Workaround for https://github.com/NixOS/nixpkgs/issues/550181: jsr:@db/sqlite
-        # dlopen()s libsqlite3.so, conflicting with deno's own linked copy unless pinned.
-        DENO_SQLITE_PATH = "${pkgs.sqlite.out}/lib/libsqlite3.so";
         EDITOR = "vim";
         # FZF_DEFAULT_OPTS = "--reverse --bind 'ctrl-y:accept'";
         NVIM_APPNAME = "nvim";
@@ -197,6 +194,14 @@ in {
         if [ -f "/etc/profiles/per-user/''${USER}/etc/profile.d/hm-session-vars.sh" ]; then
           source "/etc/profiles/per-user/''${USER}/etc/profile.d/hm-session-vars.sh"
         fi
+
+        # Workaround for https://github.com/NixOS/nixpkgs/issues/550181: jsr:@db/sqlite
+        # dlopen()s libsqlite3.so, conflicting with deno's own linked copy unless pinned.
+        # Exported here rather than via sessionVariables: that block is skipped whenever
+        # __HM_ZSH_SESS_VARS_SOURCED is inherited from a long-lived parent (Orca relay,
+        # herdr daemon), which leaves a stale store path behind after a nixpkgs bump and
+        # segfaults every deno process that touches sqlite (e.g. zeno.zsh's server).
+        export DENO_SQLITE_PATH="${pkgs.sqlite.out}/lib/libsqlite3.so"
 
         # locale
         if locale -a 2>/dev/null | grep -q "en_US.UTF-8"; then
