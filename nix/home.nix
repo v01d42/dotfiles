@@ -18,6 +18,48 @@
 
   # Direct symlink (not via Nix store)
   symlink = config.lib.file.mkOutOfStoreSymlink;
+
+  # Third-party Claude Code skills, frozen at a rev. `path` is the skill
+  # directory inside the repository. Update by replacing rev and hash
+  # (`nix run nixpkgs#nurl -- <repo-url> <rev>`).
+  externalSkills = {
+    ponytail = {
+      src = pkgs.fetchFromGitHub {
+        owner = "DietrichGebert";
+        repo = "ponytail";
+        rev = "1d95ff7d39de12d87014ea40d4e22201bddc501b"; # v4.10.0
+        hash = "sha256-PES5XrSYx0VBXWVHEDRykGy0SAmJfV/luzy8Gfg0aAQ=";
+      };
+      path = "skills/ponytail";
+    };
+    i-have-adhd = {
+      src = pkgs.fetchFromGitHub {
+        owner = "ayghri";
+        repo = "i-have-adhd";
+        rev = "839872f9d1cd634fed642b4589ce7226199cc15f";
+        hash = "sha256-UExi0k71MOtLwqVaFRGhgvqq6+jxwbQxZZVZxceHGrw=";
+      };
+      path = "skills/i-have-adhd";
+    };
+    grilling = {
+      src = pkgs.fetchFromGitHub {
+        owner = "mattpocock";
+        repo = "skills";
+        rev = "d81f3a183412e71a5b1e84ca21bc1a35eea03a60";
+        hash = "sha256-zQ/wVrcHjIC+UjP4nDw3HARMqZd6LIDFmHKlp8AADYI=";
+      };
+      path = "skills/productivity/grilling";
+    };
+  };
+
+  # Own skills, discovered from the repository. "synced" is what Claude Code
+  # writes into ~/.claude/skills itself.
+  ownSkills =
+    lib.subtractLists
+    (builtins.attrNames externalSkills ++ ["synced"])
+    (builtins.attrNames
+      (lib.filterAttrs (_: type: type == "directory")
+        (builtins.readDir ../config/claude/skills)));
 in {
   imports = [
     ./modules/editorconfig.nix
@@ -116,13 +158,26 @@ in {
       ++ lib.optionals (profile == "2") [
         pkgs.glab
       ];
-    file = {
-      ".claude/skills".source = symlink "${dotfilesDir}/config/claude/skills";
-      # Individual file, not the whole ".claude/hooks" dir: herdr owns that
-      # directory and writes its own hook script into it directly.
-      ".claude/hooks/lint-ai-words.sh".source = symlink "${dotfilesDir}/config/claude/hooks/lint-ai-words.sh";
-      ".codex/config.toml".source = symlink "${dotfilesDir}/config/codex/config.toml";
-    };
+    file =
+      {
+        # Individual file, not the whole ".claude/hooks" dir: herdr owns that
+        # directory and writes its own hook script into it directly.
+        ".claude/hooks/lint-ai-words.sh".source = symlink "${dotfilesDir}/config/claude/hooks/lint-ai-words.sh";
+        ".codex/config.toml".source = symlink "${dotfilesDir}/config/codex/config.toml";
+      }
+      # One entry per skill, not the whole ".claude/skills" dir: Claude Code
+      # syncs Anthropic-managed skills into it, and the Nix store holds the
+      # third-party ones.
+      // lib.listToAttrs (map (name: {
+          name = ".claude/skills/${name}";
+          value.source = symlink "${dotfilesDir}/config/claude/skills/${name}";
+        })
+        ownSkills)
+      // lib.mapAttrs' (name: skill:
+        lib.nameValuePair ".claude/skills/${name}" {
+          source = "${skill.src}/${skill.path}";
+        })
+      externalSkills;
   };
 
   xdg.configFile = {

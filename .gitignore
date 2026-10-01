@@ -2,6 +2,7 @@
 config/codex/*
 !config/codex/config.toml
 
-# Claude Code syncs Anthropic-managed skills into ~/.claude/skills, which
-# nix/home.nix symlinks to config/claude/skills. Own skills stay tracked.
+# Leftover from when nix/home.nix symlinked the whole ~/.claude/skills to
+# config/claude/skills and Claude Code synced Anthropic-managed skills into it.
+# Skills are now linked one by one, so synced/ lives outside the repository.
 config/claude/skills/synced/
