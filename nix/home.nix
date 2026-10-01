@@ -50,6 +50,15 @@
       };
       path = "skills/productivity/grilling";
     };
+    yomiyasu = {
+      src = pkgs.fetchFromGitHub {
+        owner = "nanaism";
+        repo = "yomiyasu";
+        rev = "30ee6041c328ce21d38a7963f667e079a93d7a12";
+        hash = "sha256-s8fAxUIb90mXsibjmOzDKDDxk+Xu/JWIaaDWHsE9JiE=";
+      };
+      path = "skills/yomiyasu";
+    };
   };
 
   # Own skills, discovered from the repository. "synced" is what Claude Code
