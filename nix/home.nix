@@ -379,6 +379,7 @@ in {
         "vde-layout"
         "textlint"
         "textlint-rule-preset-ai-words-ja"
+        ${lib.optionalString (profile == "2") ''"@pnp/cli-microsoft365"''}
       )
 
       # Install missing packages
